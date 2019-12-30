@@ -1,18 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import * as serviceWorker from './serviceWorker'
+import App from './App'
+import './style.css'
 
-// import App from './useState-example';
-// import App from './useEffect-example';
-// import App from './customHook-example';
-// import App from './useDataApiHook-example';
-// import App from './useDataApiHook-external-example';
-import App from './lesson-example';
+const Shopify = require('shopify-api-node')
 
-import * as serviceWorker from './serviceWorker';
+const shopify = new Shopify({
+  shopName: process.env.REACT_APP_SHOP_NAME,
+  accessToken: process.env.REACT_APP_SHOPIFY_ACCESS_TOKEN,
+})
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const query = `{
+  shop {
+    name
+  }
+}`
+
+shopify
+  .graphql(query)
+  .then(shop => console.log(shop))
+  .catch(err => console.error(err))
+
+ReactDOM.render(<App />, document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.unregister()
